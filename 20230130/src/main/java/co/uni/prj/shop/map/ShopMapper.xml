@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.uni.prj.shop.map.ShopMapper">
+
+	<!-- ▶ 객체 지향 레쭈고 id : 프라이머리키 컬럼 | result : id 제외한 나머지 컬럼 -->
+	<resultMap type="co.uni.prj.shop.vo.ShopCustomerVO"
+		id="customer">
+		<id property="shCustomerId" column="SH_CUSTOMER_ID" />
+		<result property="shCustomerName" column="SH_CUSTOMER_NAME" />
+		<result property="shCustomerTel" column="SH_CUSTOMER_TEL" />
+		<association property="shopMember"
+			javaType="co.uni.prj.shop.vo.ShopMemberVO">
+			<id property="shId" column="SH_ID" />
+			<result property="shPassword" column="SH_PASSWORD" />
+			<result property="shGubun" column="SH_GUBUN" />
+		</association>
+	</resultMap>
+
+	<select id="getCustObjectList" resultMap="customer">
+		SELECT * FROM
+		SHOPMEMBER S, SHOPCUSTOMER C
+		WHERE
+		S.SH_ID = C.SH_CUSTOMER_ID
+	</select>
+
+	<!-- ▶ ~ 객체지향 아님 -->
+	<select id="getCustomerList" resultType="map">
+		SELECT S.*,
+		C.SH_CUSTOMER_NAME, C.SH_CUSTOMER_TEL
+		FROM SHOPMEMBER S, SHOPCUSTOMER C
+		WHERE S.SH_ID=C.SH_CUSTOMER_ID
+	</select>
+
+	<select id="getShopList"
+		resultType="co.uni.prj.shop.vo.ShopUserVO">
+		SELECT S.SH_PASSWORD, S.SH_GUBUN, U.*
+		FROM SHOPMEMBER S,
+		SHOPUSER U
+		WHERE S.SH_ID = U.SH_USER_ID
+	</select>
+
+	<select id="loginCheck"
+		resultType="co.uni.prj.shop.vo.ShopMemberVO"></select>
+
+	<select id="isIdCheck" resultType="boolean">
+		SELECT
+		CASE
+		WHEN COUNT(SH_ID)=1
+		THEN 1 ELSE 0 END AS ID
+		FROM SHOPMEMBER
+		WHERE
+		SH_ID=#{id}
+	</select>
+
+	<insert id="setShopUser">
+		INSERT INTO SHOPUSER
+		VALUES(#{shUserId}, #{shUserName},#{shUserShopName})
+	</insert>
+
+	<insert id="setCustomer">
+		INSERT INTO SHOPCUSTOMER
+		VALUES(#{shCustomerId}, #{shCustomerName},#{shCustomerTel})
+	</insert>
+
+	<insert id="setMember">
+		INSERT INTO SHOPMEMBER
+		VALUES(#{shId},
+		#{shPassword},#{shGubun})
+	</insert>
+
+	<!-- ▶ 시험문제========================================================= -->
+	<!-- ▶ 직원 회원가입 -->
+	<insert id="setEmployee">
+		INSERT INTO SHOPEMPLOYEE VALUES
+		(#{shEmpId},#{empName},#{empDepartment},#{empPosition},#{empHireDate},#{empEndDate})
+	</insert>
+
+	<!-- ▶ 직원 리스트 -->
+	<resultMap type="co.uni.prj.shop.vo.ShopEmployeeVO"
+		id="employee">
+		<id property="shEmpId" column="sh_Emp_Id" />
+		<result property="empName" column="emp_Name" />
+		<result property="empDepartment" column="emp_Department" />
+		<result property="empPosition" column="emp_Position" />
+		<result property="empHireDate" column="emp_Hire_Date" />
+		<result property="empEndDate" column="emp_End_Date" />
+		<association property="shopMember"
+			javaType="co.uni.prj.shop.vo.ShopMemberVO">
+			<id property="shId" column="sh_id" />
+			<result property="shPassword" column="sh_password" />
+			<result property="shGubun" column="sh_gubun" />
+		</association>
+	</resultMap>
+
+	<select id="getEmployeeList" resultMap="employee">
+		SELECT *
+		FROM SHOPMEMBER
+		S, SHOPEMPLOYEE E
+		WHERE S.SH_ID = E.SH_EMP_ID
+		ORDER BY E.EMP_DEPARTMENT,
+		E.EMP_POSITION DESC
+	</select>
+
+</mapper>
