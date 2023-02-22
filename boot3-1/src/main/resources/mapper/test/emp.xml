@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.uni.demo.EmpMapper">
+	<!-- 단건조회 -->
+	<select id="getEmp" parameterType="co.uni.demo.EmpVO"
+		resultType="co.uni.demo.EmpVO">
+		SELECT *
+		FROM EMPLOYEES
+		WHERE
+		EMPLOYEE_ID = #{employeeId}
+	</select>
+
+	<!-- 등록 -->
+	<insert id="insertEmp" parameterType="co.uni.demo.EmpVO">
+		INSERT INTO EMPLOYEES (
+		EMPLOYEE_ID,
+		FIRST_NAME,
+		LAST_NAME,
+		EMAIL,
+		HIRE_DATE,
+		JOB_ID
+		) VALUES (
+		#{employeeId},#{firstName},
+		#{lastName},
+		#{email},
+		#{hireDate},
+		#{jobId}
+		)
+	</insert>
+
+	<!-- 삭제 : delete인데 왜 insert인가요? 상관ㄴㄴ이기때문 -->
+	<insert id="deleteEmp" parameterType="String">
+		DELETE FROM EMPLOYEES
+		WHERE
+		EMPLOYEE_ID =
+		#{employeeId}
+	</insert>
+
+	<!-- 수정 -->
+	<update id="updateEmp" parameterType="co.uni.demo.EmpVO">
+		UPDATE EMPLOYEES
+		SET
+		FIRST_NAME = #{firstName},
+		LAST_NAME = #{lastName},
+		EMAIL = #{email},
+		PHONE_NUMBER =
+		#{phoneNumber},
+		JOB_ID = #{jobId},
+		SALARY = #{salary}
+		WHERE EMPLOYEE_ID =
+		#{employeeId}
+	</update>
+
+
+	<!-- 검색 -->
+	<select id="getJobList" resultType="map">
+		SELECT * FROM JOBS ORDER
+		BY
+		JOB_ID
+	</select>
+
+
+	<!-- 체크 -->
+	<sql id="creiteria">
+		<where>
+			<if test="departmentId != null and departmentId != ''">
+				DEPARTMENT_ID = #{departmentId}
+			</if>
+			<!-- null인지 체크 + 스트링 비었는지('') 체크(위에서 equals('')는 안 먹힘!) = 이중체크 해야함 -->
+			<if test="jobId != null and jobId != ''">
+				AND JOB_ID = #{jobId}
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="getcountTotal" resultType="int">
+		SELECT COUNT(*) FROM
+		EMPLOYEES
+		<include refid="creiteria"></include>
+	</select>
+
+	<select id="getEmpList" resultType="co.uni.demo.EmpVO"
+		parameterType="co.uni.demo.EmpVO">
+		SELECT * FROM(SELECT ROWNUM rn, a.*FROM (
+		SELECT * FROM EMPLOYEES
+		<include refid="creiteria"></include>
+		ORDER BY FIRST_NAME
+	          <![CDATA[
+	          	)a WHERE ROWNUM<=#{last}  ) b WHERE rn >= #{first}
+	          ]]>
+	</select>
+</mapper>

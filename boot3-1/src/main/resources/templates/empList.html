@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<th:block layout:fragment="header">
+	<style>
+.green {
+	background-color: green;
+}
+</style>
+	<script></script>
+</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		[[${jobList[0]}]]
+		<hr>
+		[[${empSearchVO}]]
+		<hr>
+
+		<script>
+			function gopage(page) {
+				//location.href = "empList?page=" + page;
+				frmSearch.page.value = page;
+				frmSearch.submit();
+			}
+		</script>
+
+		<form name="frmSearch">
+			<input type="hidden" name="page" value="1"> <select
+				name="jobId">
+				<option value=""> 선택
+				<option th:each="job : ${jobList}" 
+				th:text="${job.JOB_TITLE}" 
+				th:value="${job.JOB_ID}"
+				th:selected="${job.JOB_ID}==${esvo.jobId}">
+			</select>
+			
+			<input name="departmentId" th:value="${esvo.departmentId}">
+			<button>검색</button>
+			<button>초기화</button>
+		</form>
+		<div>
+			<a
+				th:each="num: *{#numbers.sequence(paging.startPage, paging.endPage)}"
+				th:href="|javascript:gopage(${num})|"
+				th:class="${paging.page}==${num}?'active'"> [[${num}]] </a>
+		</div>
+
+
+		<!-- 타임리프   -->
+		총사원수 : <span th:text="${#lists.size(empList)}"></span> 총사원수 :
+		[[${#lists.size(empList)}]]
+		<table>
+			<tr>
+				<th>empStat.count</th>
+				<th>employee_id</th>
+				<th>department_id</th>
+				<th>job_id</th>
+				<th>first_name</th>
+				<th>last_name</th>
+				<th>salary</th>
+			</tr>
+
+			<tr th:each="emp : ${empList}" th:class="${empStat.even?'green':''}">
+				<td th:text="${empStat.count}"></td>
+				<td th:text="${emp.employeeId}"></td>
+				<td th:text="${emp.departmentId}"></td>
+				<td th:text=${emp.jobId}></td>
+				<td th:text="${emp.firstName}"></td>
+				<td th:text="${emp.lastName}"></td>
+				<td th:text="${emp.salary}"></td>
+				<td th:text="${emp.hireDate}"></td>
+
+				<!-- if문 -->
+				<td>
+					<button th:if="${emp.salary}>10000">보너스</button>
+				</td>
+
+				<td th:text="${#dates.format(emp.hireDate,	'yyyy-MM-dd')}"></td>
+			</tr>
+		</table>
+		<div th:insert="~{footer :: copy}"></div>
+		<!-- footer는 파일명. 파일 안에서 이름이 copy인 거 찾아서 넣어줘 -->
+	</div>
+	<footer th:replace="~{footer :: copy}"></footer>
+</body>
+</html>
