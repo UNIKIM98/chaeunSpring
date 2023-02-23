@@ -73,7 +73,6 @@
 		</where>
 	</sql>
 
-
 	<select id="getcountTotal" resultType="int">
 		SELECT COUNT(*) FROM
 		EMPLOYEES
