@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //@RequestMapping("emp") //이거 하면 밑에서 GetMapping 할 때 "/~~" 안 해주ㅓ도 됨
-//@CrossOrigin
+@CrossOrigin(value = "*")
 @Controller
 @Log4j2
 public class EmpController {
@@ -32,6 +34,19 @@ public class EmpController {
 	EmpMapper empMapper;
 
 //	Logger logger = LoggerFactory.getLogger(EmpController.class);
+
+	// ▶
+	@PostMapping("/product")
+	@ResponseBody
+	public Map product(@RequestBody List<Map<String, Object>> list) {
+		System.out.println("==================" + list);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+
+		map.put("result", "Success");
+		map.put("size", list.size());
+		return map;
+	}
 
 	@GetMapping("/empList") // 커멘드객체 : 자동으로 모델에 등록되어있음!
 	public String empList(Model model, @ModelAttribute("esvo") EmpSearchVO svo, Paging paging) {
@@ -59,6 +74,7 @@ public class EmpController {
 	@GetMapping("/emp/{id}") // {~~} : 단건조회
 	@ResponseBody // javaVO 객체를 JSON 구조의 String으로 자동 변환
 	public EmpVO getEmp(@PathVariable String id) {
+		System.out.println(id);
 		return empMapper.getEmp(id);
 	}
 
@@ -72,7 +88,7 @@ public class EmpController {
 	@PutMapping("/emp") // 수정
 	@ResponseBody
 	public EmpVO updateEmp(@RequestBody EmpVO vo) {
-		//@RequestBody해줘야 json으로 값을 받을 수 있음
+		// @RequestBody해줘야 json으로 값을 받을 수 있음
 		empMapper.updateEmp(vo);
 		return vo;
 	}
