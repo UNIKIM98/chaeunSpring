@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.five.mprj.orders.map.OrdersMapper">
+
+	<!-- 전체조회 -->
+	<select id="ordersSelectList"
+		resultType="co.five.mprj.orders.service.OrdersVO">
+		SELECT P.PRODUCT_NUM, P.PRODUCT_NAME, P.PRODUCT_DATE,
+		O.ORDERS_DATE,
+		O.ORDERS_DEADLINE, O.ORDERS_STATUS, O.ORDERS_NUM,
+		O.MEMBER_ID,
+		O.ORDERS_STATUS, P.PRODUCT_THUMBNAIL_URL
+		FROM PRODUCT P
+		JOIN ORDERS O
+		ON P.PRODUCT_NUM = O.PRODUCT_NUM
+		WHERE
+		O.MEMBER_ID=#{memberId}
+	</select>
+
+	<select id="ordersDeadlineSelect"
+		parameterType="co.five.mprj.orders.service.OrdersVO">
+		SELECT O.ORDERS_DATE+P.PRODUCT_DATE
+		FROM ORDERS O JOIN
+		PRODUCT P
+		ON O.PRODUCT_NUM = P.PRODUCT_NUM
+		WHERE O.ORDERS_NUM
+	</select>
+
+	<!-- 입력 -->
+	<insert id="ordersInsert"
+		parameterType="co.five.mprj.orders.service.OrdersVO">
+		<selectKey keyProperty="ordersNum" resultType="int"
+			order="BEFORE">
+			SELECT
+			CASE WHEN MAX((ORDERS_NUM) ) IS NULL THEN 1 ELSE
+			MAX((ORDERS_NUM) ) + 1
+			END
+			FROM ORDERS
+		</selectKey>
+		INSERT INTO ORDERS (ORDERS_NUM, PRODUCT_NUM, MEMBER_ID, ORDERS_DATE,
+		ORDERS_DEADLINE)
+		VALUES(#{ordersNum},
+		#{productNum},#{memberId},SYSDATE,(
+		SELECT SYSDATE+PRODUCT_DATE
+		FROM PRODUCT
+		WHERE PRODUCT_NUM = #{productNum}
+		))
+	</insert>
+
+	<!-- status 수정 -->
+	<update id="ordersStatusUpdate"
+		parameterType="co.five.mprj.orders.service.OrdersVO">
+		UPDATE ORDERS
+		<set>
+			ORDERS_STATUS = 'NO'
+		</set>
+		WHERE ORDERS_NUM = #{ordersNum}
+	</update>
+
+	<!-- join해서 PRODUCT_NAME,PRODUCT_THUMBNAIL_URL 가지고오기 -->
+	<select id="ordersSelectProduct"
+		resultType="co.five.mprj.orders.service.OrdersVO">
+		SELECT O.MEMBER_ID,O.ORDERS_DATE,O.ORDERS_DEADLINE,
+		P.PRODUCT_NAME,
+		P.PRODUCT_THUMBNAIL_URL,P.PRODUCT_DATE,P.PRODUCT_YOUTUBE_URL
+		FROM
+		ORDERS O JOIN PRODUCT P
+		ON P.PRODUCT_NUM = O.PRODUCT_NUM
+		WHERE
+		O.MEMBER_ID= #{memberId } And O.ORDERS_STATUS ='YES'
+	</select>
+
+	<!-- 결제내역 조회 -->
+	<select id="ordersListProduct"
+		resultType="co.five.mprj.orders.service.OrdersVO">
+		SELECT O.MEMBER_ID, O.ORDERS_DATE, O.ORDERS_DEADLINE,
+		O.ORDERS_STATUS, P.PRODUCT_NAME,
+		P.PRODUCT_THUMBNAIL_URL,P.PRODUCT_DATE
+		FROM ORDERS O JOIN PRODUCT P
+		ON
+		P.PRODUCT_NUM = O.PRODUCT_NUM
+		WHERE O.MEMBER_ID= #{memberId }
+	</select>
+
+
+</mapper>

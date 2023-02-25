@@ -1,0 +1,23 @@
+.gradient-btn{
+  display: inline-block;
+    padding: 0.5em 1em;
+    border-radius: 0;
+  color: #515050;
+    margin-top:2rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+  background: linear-gradient(to right, rgba(#515050, 0) 25%, rgba(#515050, .8) 75%);
+  background-position: 1% 50%;
+  background-size: 400% 300%;
+  border: 1px solid #959494;
+  @include transition;
+  
+/*   &:hover{ */
+/*     color: white; */
+/*       color: #fff; */
+/*       background-position: 99% 50%; */
+/*   } */
+}

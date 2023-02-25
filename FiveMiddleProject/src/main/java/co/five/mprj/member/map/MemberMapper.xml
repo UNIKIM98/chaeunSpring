@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.five.mprj.member.map.MemberMapper">
+	<!-- 전체회원조회 -->
+	<select id="memberSelectList"
+		resultType="co.five.mprj.member.service.MemberVO">
+		SELECT * FROM MEMBER ORDER BY MEMBER_ID DESC
+	</select>
+	
+	<!-- 한 회원 조회 / 로그인 -->
+	<select id="memberSelect"
+		resultType="co.five.mprj.member.service.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE MEMBER_ID = #{memberId}
+		<if test="memberPassword != null">
+			AND MEMBER_PASSWORD = #{memberPassword}
+		</if>
+	</select>
+	
+	<!-- 한 회원 조회 / 회원정보수정 -->
+	<select id="memberSelectShow"
+		resultType="co.five.mprj.member.service.MemberVO">
+		SELECT * FROM MEMBER
+		WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	
+
+	<!-- 회원 가입 -->
+	<insert id="memberInsert"
+		parameterType="co.five.mprj.member.service.MemberVO">
+		INSERT INTO MEMBER
+		VALUES(#{memberId},#{memberPassword},#{memberName},#{memberNickname},#{memberGender},
+		#{memberBirth},#{memberRole},#{memberPhone})
+	</insert>
+
+	<!-- 회원 삭제/탈퇴 -->
+	<delete id="memberDelete"
+		parameterType="co.five.mprj.member.service.MemberVO">
+		DELETE FROM MEMBER WHERE MEMBER_ID = #{memberId}
+	</delete>
+
+	<!-- 회원 정보 수정 : 아이디 동일하면 수정 -->
+	<update id="memberUpdate">
+		UPDATE MEMBER
+		<set>
+			<if test="memberPassword != null">MEMBER_PASSWORD = #{memberPassword},</if>
+			<if test="memberName != null">MEMBER_NAME = #{memberName},</if>
+			<if test="memberNickname != null">MEMBER_NICKNAME = #{memberNickname},</if>
+			<if test="memberGender != null">MEMBER_GENDER = #{memberGender},</if>
+			<if test="memberBirth != null">MEMBER_BIRTH = #{memberBirth},</if>
+			<if test="memberRole != null">MEMBER_ROLE = #{memberRole},</if>
+			<if test="memberPhone != null">MEMBER_PHONE = #{memberPhone}</if>
+		</set>
+		WHERE MEMBER_ID = #{memberId}
+	</update>
+	
+	<!-- 아이디 중복체크 // 아이디가 존재하면 0 존재하지않으면 1-->
+	<select id="isIdCheck" resultType="boolean">
+		SELECT CASE WHEN
+		COUNT(MEMBER_ID) = 1 THEN 0 ELSE 1 END
+		FROM MEMBER
+		WHERE MEMBER_ID =
+		#{memberId}
+	</select>
+
+	<!-- 닉네임 중복확인 // 닉네임 존재하면 0 존재하지않으면 1 -->
+	<select id="isNickname" resultType="boolean">
+		SELECT CASE WHEN
+		COUNT(MEMBER_NICKNAME) = 1 THEN 0 ELSE 1 END
+		FROM MEMBER
+		WHERE MEMBER_NICKNAME
+		= #{nick}
+	</select>
+</mapper>

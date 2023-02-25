@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.five.mprj.review.map.ReviewMapper">
+	<select id="reviewSelectList"
+		resultType="co.five.mprj.review.service.ReviewVO">
+		SELECT * FROM REVIEW
+		WHERE PRODUCT_NUM=#{productNum}
+		ORDER BY REVIEW_NUM DESC
+	</select>
+
+	<select id="reviewSelect"
+		resultType="co.five.mprj.review.service.ReviewVO">
+		SELECT * FROM REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</select>
+
+	<insert id="reviewInsert"
+		parameterType="co.five.mprj.review.service.ReviewVO">
+		<selectKey keyProperty="reviewNum" resultType="int"
+			order="BEFORE">
+			SELECT
+			CASE WHEN MAX(REVIEW_NUM) IS NULL THEN 1 ELSE
+			MAX(REVIEW_NUM) + 1 END AS
+			REVIEWNUM
+			FROM REVIEW
+
+		</selectKey>
+		INSERT INTO REVIEW (review_num,review_writer,review_subject,product_num)
+		VALUES(#{reviewNum},#{reviewWriter},#{reviewSubject}, #{productNum})
+	</insert>
+
+	<update id="reviewUpdate"
+		parameterType="co.five.mprj.review.service.ReviewVO">
+		UPDATE REVIEW
+		<set>
+			<if test="reviewWriter != null">REVIEW_WRITER = #{reviewWriter},</if>
+			<if test="reviewSubject != null">REVIEW_SUBJECT = #{reviewSubject},</if>
+			<if test="reviewDate != null">REVIEW_DATE = #{reviewDate}</if>
+		</set>
+		WHERE REVIEW_NUM = #{reviewNum}
+	</update>
+
+	<delete id="reviewDelete"
+		parameterType="co.five.mprj.review.service.ReviewVO">
+		DELETE FROM REVIEW WHERE REVIEW_NUM = #{reviewNum}
+	</delete>
+
+</mapper>
+	

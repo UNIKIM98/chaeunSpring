@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+.col2 {
+	width: 100%;
+	max-width: 1000px;
+	margin: 20px auto;
+}
+
+/*
+  Copy from here downwards
+*/
+.qna {
+	height: 200px;
+}
+
+.qna .box.text {
+	padding: 20px 50px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.qna .box.text>h2 {
+	text-align: center;
+	position: relative;
+}
+
+.qna .box.text>h2:after {
+	content: "\f054";
+	font-family: "Font Awesome 5 Pro";
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: rotate(0deg);
+	transition: 0.25s;
+}
+
+.qna .box.text.qna_show>h2:after {
+	transform: rotate(90deg);
+}
+
+.qna .box.text>h2:before {
+	content: "Q. ";
+}
+
+.qna .box.text>.box_content {
+	overflow: hidden;
+	padding: 0 50px;
+}
+
+.qna .box.text>.box_content p:first-of-type:before {
+	content: "A. ";
+	font-weight: bold;
+}
