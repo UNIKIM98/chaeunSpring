@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://ultraq.net/thymeleaf/layout"
+	layout:decorate="~{myPages/sideBar/sideBar}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.container {
+	width: 100%
+}
+
+.leftCoupon {
+	width: 50%;
+	float: left;
+	box-sizing: border-box;
+}
+
+.rightPoint {
+	width: 50%;
+	float: right;
+	box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="myContent">
+		<div class="row mb-100 mt-30">
+			<div class="container">
+				<div class="section-title text-start leftCoupon">
+					<h2 class="uppercase">나의 쿠폰</h2>
+					<hr>
+					<h3 style="font-weight: bold;">사용가능쿠폰</h3>
+				</div>
+
+				<div class="section-title text-start rightPoint">
+					<h2 class="uppercase">나의 포인트</h2>
+					<hr>
+					<h3 style="font-weight: bold;">포인트적립내역</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

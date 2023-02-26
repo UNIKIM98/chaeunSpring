@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👻ToDoChart</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        let originData = [
+            ['메뉴🍴', '투표수'],
+            ['샐러드🥗', 1],
+            ['막창🥩', 1],
+            ['피자🍕', 1],
+            ['치킨🥠', 1],
+            ['딸기🍓', 1],
+            ['복숭아🍑', 1]
+        ]
+
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(originData);
+            var options = {
+                title: '저메추😋'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+    <ul id="list"></ul>
+
+    <script>
+        let list = document.getElementById('list');
+
+        originData.forEach((item, idx) => {
+            if (idx != 0) {
+                console.log(item)
+                let li = document.createElement('li');
+                let txt = document.createTextNode(item[0] + ' ');
+                let btn = document.createElement('button');
+
+                btn.innerText = '메뉴추천'
+                btn.addEventListener('click', function () {
+                    item[1]++;
+                    drawChart()
+                })
+
+                li.append(txt, btn);
+                list.append(li)
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐠Component02</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <my-component></my-component>
+        <your-component></your-component>
+
+    </div>
+
+    <script>
+        var yourComponent = {
+            template: `
+            <ul>
+                <li>Apple</li>
+                <li>Banana</li>
+                {{msg}}
+            </ul>
+            `,
+            data: function () {
+                return {
+                    msg: "Cherry"
+                }
+            },
+            methods: {
+
+            }
+        }
+        new Vue({
+            el: '#app',
+            // template: '<div><p>Hello</p></div>'
+            components: {
+                'my-component': {
+                    template: `
+                    <p class="my-comp">카운터
+                        <button v-on:click="addOne">추가</button>
+                        <span>{{count}}/{{message}}</span>
+                    </p>
+                    `,
+                    data: function () {
+                        return {
+                            count: 0,
+                            message: 'Hello'
+                        }
+                    },
+                    methods: {
+                        addOne: function () {
+                            this.count++;
+                        }
+                    }
+                },
+                'your-component': yourComponent
+            }
+
+        })
+    </script>
+</body>
+
+</html>

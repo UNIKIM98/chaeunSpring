@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let numbers = [2, 4, 87, 4, 8]
+        console.log(numbers.sort())
+
+        let objs = [{
+                name: 'c',
+                score: 25
+            },
+            {
+                name: 'b',
+                score: 50
+            },
+            {
+                name: 'a',
+                score: 80
+            }
+        ]
+
+        console.log(objs.sort(function (first, last) {
+            // return first.score - last.score 
+            /*
+            ▶ 숫자타입
+            - 음의 값 반환 : 오름순 정렬
+            - 양의 값 반환 : 내림순 정렬
+
+            ▶ 문자타입은 아래처럼 하면 됨
+            */
+            if (first.name < last.name) {
+                return -1; //오름순정렬
+            } else {
+                return 1; //내림순정렬
+            }
+        }))
+    </script>
+</body>
+
+</html>

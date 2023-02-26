@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <button v-on:click="countUp">Count 증가</button>
+        <input type="text" v-model.number="myNum">
+        <!--📍 number 타입 지정하면 밑에서 파싱 안 해줘도 됨-->
+        <button v-on:click="countNum(myNum)">Num 증가</button>
+        <!--매개변수 O-->
+        <p>{{count}}</p>
+
+        <hr>
+        <div>과일: <input type="text" v-model="fruit">
+            <button v-on:click="addFruit">추가</button>
+            <button v-on:click="removeFruit">제거</button>
+
+            <ul>
+                <li v-for="item in fruits"><span>{{item}}</span>
+                    <span><button v-on:click="delOn">삭제</button></span></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                count: 0,
+                myNum: '',
+                fruit: '',
+                fruits: ['사과', '배', '오렌지', '복숭아'],
+            },
+            methods: {
+                countUp: function () {
+                    this.count++;
+                    console.log(this) //여기서 this는 vue 객체를 뜻함
+                },
+                countNum: function () {
+                    // this.count += parseInt(this.myNum);
+                    this.count += this.myNum;
+
+                },
+                addFruit: function () {
+                    if (this.fruit == "") {
+                        alert('값을 입력하세요')
+                        return;
+                    }
+                    this.fruits.push(this.fruit);
+                    this.fruit = "";
+                    console.log(this.fruits);
+                },
+                removeFruit: function () {
+                    this.fruits.splice(1, 1) //(삭제할 인덱스, 삭제할 개수(0이면 삭제 아니고 추가됨), '대체할 값(안 적으면 삭제되는 거)')
+
+                    for (let i = 0; i < this.fruits.length; i++) {
+                        if (this.fruit == this.fruits[i]) {
+                            this.fruits.splice(i, 1)
+                        }
+                    }
+
+                    // this.fruits.forEach((item, idx) => {
+                    //     if (item == this.fruit) {
+                    //         this.fruits.splice(idx, 1)
+                    //     }
+                    // })
+                },
+                delOn: function (e) {
+                    for (let i = 0; i < this.fruits.length; i++) {
+                        if (e.target.parentNode.parentNode.firstChild.innerText == this.fruits[i]) {
+                            this.fruits.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

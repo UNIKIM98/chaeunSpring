@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic.html</title>
+
+    <!--vue 라이브러리 ver2(@2)-->
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <!--View 역할-->
+    <div id="app">
+
+        {{msg}}
+        <!--데이터를 화면에 출력할 때 {{}} 라는 표현방식 사용함 -->
+        <p>{{msg}}</p>
+        <!--태그 안에 넣기도 가능 -->
+        <p v-text="msg"></p> <!-- 지시자 사용 가능-->
+        <p v-html="mess"></p> <!-- 지시자 사용 가능-->
+
+
+    </div>
+    <script>
+        //Model 역할 수행
+        //▼ 뷰 인스턴스 역할 : view ↔ Model 상호작용(바인딩)
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'Hello World!',
+                mess: '<b>강조</b>합니다.'
+            }
+        });
+    </script>
+
+    <div id="show">
+        <!--간단한 연산도 가능-->
+        <p>{{myNumber*5}}</p>
+        <p>{{myText+'를 배워봅시다.'}}</p>
+        <p>{{myBool}}</p>
+        <p>{{myAry[0]}}</p>
+        <p>{{myObj.name+', '+myObj.age}}</p>
+        <p>{{_data}}</p>
+
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#show',
+            data: {
+                myNumber: 123,
+                myText: 'Vue.js',
+                myBool: true,
+                myAry: ['커피', '홍차', '밀크티', '쥬스'],
+                myObj: {
+                    name: '홍길동',
+                    age: 20
+                }
+            }
+        });
+
+        console.log(vm)
+        vm.myNumber = 200;
+        vm.myText = "제이쿼리";
+        // vm.data
+    </script>
+</body>
+
+</html>

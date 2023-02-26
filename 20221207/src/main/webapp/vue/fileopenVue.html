@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@2"></script>
+    <title>🌚file open</title>
+
+    <style>
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            font-family: NanumSquareNeo-Variable;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h2>🌝 json 파일 읽기(Vue)</h2>
+    <input type="file" id="fileopen">
+    <div id="app">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>상품번호</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="product in products">
+                    <td>{{product.id}}</td>
+                    <td>{{product.title}}</td>
+                    <td>{{product.price}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        //📌
+        let fileobj = document.getElementById('fileopen');
+        //
+        fileobj.onchange = function (e) {
+            let file = e.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (ee) {
+                    let result = JSON.parse(ee.target.result);
+                    vm.$data.products = result.products
+                }
+                reader.readAsText(file);
+            }
+        }
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                products: []
+            },
+            methods: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

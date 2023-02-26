@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생정렬🌈</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <!--button-->
+        <button v-on:click="sort_no">학생번호순정렬</button>
+        <button v-on:click="sort_name">학생이름순정렬</button>
+        <button v-on:click="sort_score">학생성적순정렬</button>
+
+        <!--select-->
+        <select v-model="selectModel" v-on:change="changeOrder">
+            <option v-bind:value="opt.val" v-for="opt in opts">{{opt.name}}</option>
+        </select>
+        <br>
+
+        <!--radio-->
+        <label>학번순<input type="radio" v-model="radioOrder" v-bind:value="opts[0].val"></label>
+        <label>이름순<input type="radio" v-model="radioOrder" v-bind:value="opts[1].val"></label>
+        <label>성적순<input type="radio" v-model="radioOrder" v-bind:value="opts[2].val"></label>
+
+        <hr>
+        <ul>
+            <li v-for="std in students">{{std.id}} / {{std.name}} / {{std.score}}</li>
+        </ul>
+        <hr>
+
+        <table>
+            <tbody>
+                <tr v-for="std in students">
+                    <td>{{std.id}}</td>
+                    <td>{{std.name}}</td>
+                    <td>{{std.score}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let members = [{
+            id: 101,
+            name: 'Hong',
+            score: 100
+        }, {
+            id: 102,
+            name: 'Kim',
+            score: 15
+        }, {
+            id: 103,
+            name: 'Choi',
+            score: 80
+        }, {
+            id: 104,
+            name: 'Park',
+            score: 60
+        }]
+
+        let options = [{
+                val: 'no',
+                name: '학번순'
+            },
+            {
+                val: 'name',
+                name: '이름순'
+            },
+            {
+                val: 'score',
+                name: '성적순'
+            }
+
+        ]
+
+        new Vue({
+            el: '#app',
+            data: {
+                students: members,
+                selectModel: '',
+                opts: options,
+                radioOrder: 'no'
+            },
+            methods: {
+                sort_no: function () {
+                    this.students.sort(function (a, b) {
+                        return a.id - b.id
+                    })
+                },
+                sort_name: function () {
+                    this.students.sort(function (a, b) {
+                        if (a.name < b.name) {
+                            return -1
+                        } else {
+                            return 1
+                        }
+                    })
+                },
+                sort_score: function () {
+                    this.students.sort(function (a, b) {
+                        return a.score - b.score
+                    })
+                },
+                changeOrder: function () {
+                    let selMo = this.selectModel
+                    console.log(selMo)
+                    if (selMo == 'name') {
+                        this.sort_name()
+                    } else if (selMo == 'no') {
+                        this.sort_no()
+                    } else if (selMo = 'score') {
+                        this.sort_score()
+                    }
+                }
+            },
+            watch: {
+                /* 📌watch 매개값 2개
+                    function(parm1, parm2){
+                        console.log(parm1) ====> 새로운 값
+                        console.log(parm2) ====> 이전 값
+                    }
+                */
+                radioOrder: function (arg) {
+                    if (arg == 'name') {
+                        this.sort_name()
+                    } else if (arg == 'no') {
+                        this.sort_no()
+                    } else if (arg = 'score') {
+                        this.sort_score()
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

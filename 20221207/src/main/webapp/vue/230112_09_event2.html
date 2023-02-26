@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event2</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <label>이름<input type="text" v-model="friendName"></label>
+        <br>
+        <label>나이<input type="text" v-model="friendAge"></label>
+        <button v-on:click="addFriend">등록</button>
+
+        <br><br>
+        <table border="1px solid">
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>나이</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="friend in friends">
+                    <td>{{friend.name}}</td>
+                    <td>{{friend.age}}</td>
+                    <td> <button v-on:click="delFriend">삭제</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                friends: [{
+                        name: '홍길동',
+                        age: 20
+                    },
+                    {
+                        name: '박문수',
+                        age: 25
+                    }
+                ],
+                friendName: '',
+                friendAge: ''
+            },
+            methods: {
+                addFriend: function () {
+                    this.friends.push({
+                        name: this.friendName,
+                        age: this.friendAge
+                    })
+                },
+                delFriend: function (e) {
+                    for (let i = 0; i < this.friends.length; i++) {
+                        let target = e.target.parentNode.parentNode;
+                        if (target.children[0].innerText == this.friends[i].name && target.children[1]
+                            .innerText == this.friends[i].age)
+                            this.friends.splice(i, 1);
+                    }
+                    // this.friends.forEach((friend, idx) => {
+                    //     if (friend.name == this.friends[idx].name) {
+                    //         console.log('지우기')
+                    //     }
+                    // })
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

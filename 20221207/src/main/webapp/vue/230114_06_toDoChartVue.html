@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👻ToDoChart</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        let originData = [
+            ['메뉴🍴', '투표수'],
+            ['샐러드🥗', 15],
+            ['막창🥩', 18],
+            ['피자🍕', 13],
+            ['치킨🥠', 11],
+            ['딸기🍓', 17],
+            ['복숭아🍑', 20]
+        ]
+
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(originData);
+            var options = {
+                title: '저메추😋'
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <ul id="list">
+        <!-- <my-component></my-component> -->
+        <li v-for="(menu,idx) in list" v-bind:value="menu[0]" v-if="idx>0">{{menu[0]}}
+            <button v-on:click="addMenu(menu[0])">추천</button>
+            <button v-on:click="minusMenu(menu[0])">비추</button>
+        </li>
+    </ul>
+
+    <script>
+        new Vue({
+            el: '#list',
+            data: {
+                list: originData
+            },
+            methods: {
+                addMenu: function (plusMenu) {
+                    this.list.forEach((menu, idx) => {
+                        if (menu[0] == plusMenu) {
+                            menu[1] += 1;
+                            drawChart();
+                        }
+                    })
+                },
+                minusMenu: function (minusMenu) {
+                    this.list.forEach((menu, idx) => {
+                        if (menu[0] == minusMenu) {
+                            menu[1] -= 1;
+                            drawChart();
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+
+
+    <!-- <script>
+        new Vue({
+            el: '#list',
+            components: {
+                'my-component': {
+                    template: `
+                    <li v-for="(menu,idx) in list" v-bind:value="menu[0]" v-if="idx>0">{{menu[0]}}
+                        <button v-on:click="addMenu(menu[0])">추천</button>
+                        <button v-on:click="minusMenu(menu[0])">비추</button>
+                    </li>`,
+                    data: function () {
+                        return {
+                            orgDatas: originData
+                        }
+                    },
+                    methods: {
+                        addMenu: function (plusMenu) {
+                            this.list.forEach((menu, idx) => {
+                                if (menu[0] == plusMenu) {
+                                    menu[1] += 1;
+                                    drawChart();
+                                }
+                            })
+                        },
+                        addMenus: function (arg = [], arg2 = 1) {
+                            this.list.forEach((menu, idx) => {
+                                if (menu[0] == arg[0]) {
+                                    let newObj = [menu[0], menu[1] + arg2]
+                                    this.list.splice(idx, 1, newObj);
+                                    //✅기존 위치에 있는 값을 새로운 값으로 변경함
+                                }
+                            })
+                            drawChart();
+                        },
+                        minusMenu: function (minusMenu) {
+                            this.list.forEach((menu, idx) => {
+                                if (menu[0] == minusMenu) {
+                                    menu[1] -= 1;
+                                    drawChart();
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        })
+    </script> -->
+</body>
+
+</html>

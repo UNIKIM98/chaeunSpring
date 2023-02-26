@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>basic4</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <select v-model="myColor">
+            <option value="" disabled>::선택::</option>
+            <option value="red">🍒</option>
+            <option value="green">🌳</option>
+            <option value="blue">🌏</option>
+            <option value="Orange">🦊</option>
+        </select>
+        <p v-bind:style="{color: myColor}">선택된 색 : {{myColor}}</p>
+        <label><input type="checkbox" v-model="agree">동의</label>
+        <button v-bind:disabled="!agree">송신</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myColor: '',
+                agree: ''
+            }
+        })
+    </script>
+</body>
+
+</html>

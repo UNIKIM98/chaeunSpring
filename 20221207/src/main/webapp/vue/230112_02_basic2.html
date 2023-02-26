@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic2</title>
+    <style>
+        .strike-through {
+            text-decoration: line-through;
+            color: lightgreen;
+        }
+
+        .dark {
+            background-color: darkseagreen;
+        }
+
+        .bigger {
+            padding: 100px;
+        }
+    </style>
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!--▶ v-bind : 태그 속성 지정(setAttribute(), attr() 재질)-->
+        <img src="쿠.jpg" width="150px" style="background-color: aquamarine; padding: 10px;">
+        <img v-bind:src="myImg" v-bind:width="myWid" v-bind:style="myStyle">
+        <a href="https://www.naver.com" v-bind:target='myTarget'>Naver</a>
+        <button v-bind:disabled="myBool">클릭</button>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myImg: '쿠.jpg',
+                myWid: '150px',
+                myStyle: 'opacity : 0.5 ; border-width : 10px ; border-style:solid ; ',
+                myTarget: '_blank', //새창에서 열기
+                myBool: true
+            }
+        })
+    </script>
+
+    <!--▶ Class이름으로 지정하기-->
+    <div class="app">
+        <p style="color: royalblue;">직접 지정</p>
+        <p v-bind:style="{color:myColor}">bind 지정(vue)</p>
+        <p v-bind:style="styleObj">Object 스타일(vue)</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '.app',
+            data: {
+                myColor: 'red',
+                styleObj: {
+                    color: 'green',
+                    backgroundColor: 'yellow', //두 단어조합은 카멜케이스로 표현(- 사용 불가)
+                    fontSize: 'large'
+                }
+            }
+
+        })
+    </script>
+
+    <!--▶ Class이름 지정하기-->
+    <div class="show">
+        <p class="strike-through">클래스지정</p>
+        <p v-bind:class="[myClass, myDark]">클래스지정</p>
+        <p v-bind:class="{'strike-through':isOk}">클래스지정</p>
+        <!--↑ strike-through 클래스 적용할 건데 isOk가 true인지 false인지에 따라 다르게 적용-->
+
+        <p v-bind:class="aryClass">bind지정</p>
+    </div>
+    <script>
+        new Vue({
+            el: '.show',
+            data: {
+                myClass: 'strike-through',
+                myDark: 'dark',
+                isOk: false,
+                aryClass: [
+                    'strike-through', 'dark'
+                ]
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌳Vue로 Board만들기</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <style>
+        @font-face {
+            font-family: 'NanumSquareNeo-Variable';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            font-family: NanumSquareNeo-Variable;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>🦝호락호락하지 않은 게시판🍈🌲</h2>
+        <!--@click == onclick-->
+        <input type="file" @change="loadData" id="">
+
+        <!--컴포넌트-->
+        <!--listOk가 true면 보여줌-->
+        <my-board-list v-if="listOk" v-bind:object="dataArray" v-on:board-delete="boardDelete"
+            v-on:board-read="boardRead">
+        </my-board-list>
+        <my-board-read v-if="readOk" v-bind:object="boardInfo" v-on:board-list="boardList"></my-board-read>
+    </div>
+
+    <script>
+        //✅목록 조회 Component
+        const MyBoardList = {
+            template: `<div>
+                <table id="list">
+                   <thead>
+                        <tr>
+                            <th>글번호</th>
+                            <th>글제목</th>
+                            <th>조회수</th>
+                            <th>삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="board in object.boards">
+                            <td>{{board.no}}</td>
+                            <td v-on:click="boardReadChild(board)">{{board.title}}</td>
+                            <td>{{board.view}}</td>
+                            <td><button v-on:click="boardDeleteChild(board.no)">삭제</button></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>`,
+            props: ['object'],
+            methods: {
+                boardDeleteChild: function (no) {
+                    //board-delete라는 함수는 존재하지 않음 그냥 커스텀 이벤트!
+                    //매개값으로 no를 넘겨줌 
+                    this.$emit('board-delete', no);
+                },
+                boardReadChild: function (info) {
+                    this.$emit('board-read', info)
+                }
+            }
+        }
+
+        //✅한 건 조회 Component
+        const MyBoardRead = {
+            template: `
+                <div>
+                    <table id=list>
+                            <tr>
+                                <td>글제목</td>
+                                <td>{{object.title}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">{{object.content}}</td>
+                            </tr>
+                    </table>
+                    <button v-on:click="boardListChild">글목록</button>
+                </div>
+            `,
+            props: ['object', 'boardInfo'],
+            methods: {
+
+                boardListChild: function () {
+                    this.$emit('board-list')
+                }
+            }
+        }
+
+        //✅Root Component : 최상위 컴포넌트
+        //✅뷰 인스턴스
+        new Vue({
+            el: '#app',
+            data: {
+                dataArray: [],
+                boardInfo: {},
+                readOk: false,
+                listOk: true
+            },
+            components: {
+                'my-board-list': MyBoardList,
+                'my-board-read': MyBoardRead
+            },
+            methods: {
+                //📍 data 불러오는 이벤트
+                loadData: function (e) {
+                    var file = e.target.files[0];
+                    // console.log(file)
+                    var vm = this;
+                    //file이 있으면 Filereader 생성
+                    if (file) {
+                        var reader = new FileReader();
+                        //file을 text타입으로 바꿔주고(json 타입을 JS 객체로 바꿔줌)
+                        reader.readAsText(file);
+                        reader.onload = function (e) {
+                            //parsing한 데이터를 vue의 dataArray에 넣어주고 싶다면!
+                            //this.dataArray가 아닌 이유는 여기에서의 this는 reader이기 때문~!
+                            vm.dataArray = JSON.parse(e.target.result);
+
+                        }
+                    }
+                },
+                //boardDelete를 왜 myBoardList 컴포넌트 내 메소드로 등록하지 않고 여기에 등록하남요
+                //일단 data(loadData) 도 여기 있고, 컴포넌트에 등록하면 부모요소 찾아가야하기때문에 번거롭기 때문~!
+                boardDelete: function (no) {
+                    console.log('boardDelete왔음')
+                    console.log(no)
+                    for (let i = 0; i < this.dataArray.boards.length; i++) {
+                        if (this.dataArray.boards[i].no == no) {
+                            console.log('hi')
+                            this.dataArray.boards.splice(i, 1);
+                        }
+                    }
+                },
+                boardRead: function (info) {
+                    console.log(info)
+                    this.boardInfo = info;
+                    this.listOk = false;
+                    this.readOk = true;
+
+                    //글 조회시 조회수 증가
+                    console.log(this.dataArray.boards);
+                    console.log(this.dataArray.boards[0].no);
+                    console.log(info)
+                    console.log(info.no);
+
+
+                    for (let i = 0; this.dataArray.boards.length; i++) {
+                        if (this.dataArray.boards[i].no == info.no) {
+                            this.dataArray.boards[i].view += 1;
+                        }
+                    }
+                },
+                boardList: function () {
+                    this.listOk = true;
+                    this.readOk = false;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

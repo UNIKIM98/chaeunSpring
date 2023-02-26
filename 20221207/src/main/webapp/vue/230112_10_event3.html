@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <!--computed : Vue의 data값을 지정하고 연산처리한 결과값-->
+        <p>{{friends}}</p>
+        <p> {{filterFriend}}</p>
+        <hr>
+        <input type="number" v-model="price">원<br>
+        <input type="number" v-model="count">개<br>
+        <p>합계 {{sum}}</p>
+        <hr>
+        <p>감상내용을 50자 이내로 작성해주세요.</p>
+        <textarea v-model="textArea" cols="80" rows="10" v-bind:disabled="writable"></textarea>
+        <p v-bind:style="{color : warningColor}">남은 글자수 : {{remaing}}</p>
+        <input type="text" v-model="findWord">
+        <ul>
+            <li v-for="word in filterWord">{{word}}</li>
+        </ul>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                friends: ['레이첼', '로스', '모니카', '챈들러', '조이', '피비'],
+                price: 10000,
+                count: 3,
+                textArea: '',
+                writable: false,
+                wordlist: ['abble', 'banana', 'police', 'good'],
+                findWord: ''
+            },
+            computed: {
+                //연산처리 가능한 속성들이 옴
+                //연산처리한 결과값
+                filterFriend: function () {
+                    return this.friends.filter(friend => {
+                        return friend.indexOf('로') != -1;
+                    })
+                },
+                sum: function () {
+                    return this.count * this.price;
+                },
+                remaing: function () {
+                    return 50 - this.textArea.length
+                },
+                warningColor: function () {
+                    if (this.remaing == 0) {
+                        this.writable = true;
+                    } else if (this.remaing <= 10) {
+                        return 'red'
+                    } else if (this.remaing <= 20) {
+                        return 'blue'
+                    }
+                },
+                filterWord: function () {
+                    if (this.findWord) {
+                        return this.wordlist.filter(word => {
+                            console.log(word, this.findWord)
+                            return word.indexOf(this.findWord) != -1; //return true or false
+                        })
+                    } else {
+                        return this.wordlist;
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

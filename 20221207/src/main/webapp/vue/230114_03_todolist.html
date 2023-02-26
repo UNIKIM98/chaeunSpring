@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤸‍♂️ToDoList🏃‍♀️</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <style>
+        .done-style {
+            text-decoration: line-through;
+            color: lightgray;
+        }
+
+        button {
+            display: inline-block;
+
+        }
+
+        /* 
+        @font-face {
+            font-family: 'Bareun_hipi';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_01@1.0/Bareun_hipi.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            font-family: Bareun_hipi;
+            font-size: large;
+        } */
+    </style>
+</head>
+
+<body>
+    <h2 style="text-align: center;">🤸‍♂️ToDoList🏃‍♀️</h2>
+    <div id="app">
+        <!--todolist 등록하는 메소드 keyup.enter : 엔터 누르면 commit-->
+        <input type="text" v-model="addText" v-on:keyup.enter="addTodo" placeholder="Enter ToDoList">
+        <input type="text" placeholder="완료일자(yyyyMMdd)" v-model="doneDate" v-on:keyup.enter="addTodo">
+        <div v-for="todo in todos" style="padding-top: 5px;">
+            <!--true false 적용될 체크박스-->
+            <input type="checkbox" v-model="todo.done">
+
+            <!--값 들어올 span 태그-->
+            <span v-bind:class="{'done-style': todo.done}">{{todo.text}} (~ {{todo.doneDate}})</span>
+        </div>
+        <p>🌳 진행상황 : {{remaining}}/{{todos.length}}</p>
+        <p><button v-on:click="clearToDo">처리완료삭제</button></p>
+        <p><button v-on:click="newDD">완료일순정렬</button></p>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                todos: [{
+                        done: false,
+                        text: '뷰 공부',
+                        doneDate: '20230113'
+                    },
+                    {
+                        done: false,
+                        text: '자바스크립트 복습',
+                        doneDate: '20200506'
+                    },
+                    {
+                        done: false,
+                        text: '자바 복습',
+                        doneDate: '20210821'
+                    }
+
+                ],
+                addText: '',
+                doneDate: ''
+            },
+            methods: {
+                addTodo: function () {
+                    if (this.doneDate == "") {
+                        alert('🦔완료일자를 입력해주세요🌿');
+                        document.querySelector('input[placeholder="완료일자(yyyyMMdd)"').focus();
+                        return;
+                    } else if (this.addText == "") {
+                        alert('🐍투두리스트를 입력해주세요🍂')
+                        document.querySelector('input[placeholder="Enter ToDoList"').focus();
+
+                        return;
+                    }
+                    this.todos.push({
+                        done: false,
+                        text: this.addText,
+                        doneDate: this.doneDate
+                    })
+                    this.addText = ""
+                    this.doneDate = ""
+                },
+                clearToDo: function () {
+                    this.todos = this.todos.filter(todo => {
+                        return todo.done == false
+                    })
+                },
+                newDD: function () {
+                    this.todos.sort(function (a, b) {
+                        return parseInt(a.doneDate) - parseInt(b.doneDate)
+                    })
+                }
+            },
+            computed: {
+                remaining: function () {
+                    return this.todos.filter(todo => {
+                        return todo.done
+                    }).length
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

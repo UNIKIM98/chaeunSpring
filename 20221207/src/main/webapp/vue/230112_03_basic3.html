@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic3</title>
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <!--▶ v-model : 양방향 바인딩(input tag)-->
+    <div id="app">
+        <!--input 작성-->
+        <input type="text" v-model="myName">
+        <!--출력-->
+        <p>{{myName}}</p>
+
+        <p>---------------------------------------------------</p>
+        <!--textarea 작성-->
+        <textarea v-model="myText"></textarea>
+        <p>👻 문자수 : {{myText.length}}자</p>
+        <!--출력-->
+        <p>{{myText}}</p>
+
+        <p>---------------------------------------------------</p>
+        <!--checkbox-->
+        <label for="">
+            <input type="checkbox" v-model="myCheck" true-value="Yes" false-value="No">
+            <p>체크 상태값 : {{myCheck}}</p>
+        </label>
+        <p>---------------------------------------------------</p>
+
+        <!--checkboxes-->
+        <label for="">
+            <input type="checkbox" v-model="myHobbies" value="read">독서
+        </label>
+        <label for="">
+            <input type="checkbox" v-model="myHobbies" value="movie">영화
+        </label> <label for="">
+            <input type="checkbox" v-model="myHobbies" value="sport">운동</label>
+        <p>선택된 취미 : {{myHobbies}}</p>
+        
+        <p>---------------------------------------------------</p>
+
+        <label for="">
+            <input type="radio" v-model="hobbies" value="read">독서
+        </label>
+        <label for="">
+            <input type="radio" v-model="hobbies" value="movie">영화
+        </label> <label for="">
+            <input type="radio" v-model="hobbies" value="sport">운동</label>
+        <p>선택된 취미 : {{hobbies}}</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                myName: '',
+                myText: '',
+                myCheck: '',
+                myHobbies: [],
+                hobbies: []
+            }
+        })
+    </script>
+</body>
+
+</html>

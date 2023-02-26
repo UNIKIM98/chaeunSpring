@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event4</title>
+    <script src="https://unpkg.com/vue@2"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="forbidText">
+        <textarea cols="30" rows="10" v-model="inputText" v-bind:disabled="writable">
+        </textarea>
+        <p>{{inputText}}</p>
+        <input type="text" v-model.number="restTime">
+        <p>남은시간 : {{restTime}}</p>
+        <button v-on:click="startTimer">시작</button>
+
+    </div>
+
+    <script>
+        //문자열을 배열로 변경해주는 것 : split(구분자)
+        new Vue({
+            el: '#app',
+            data: {
+                inputText: '',
+                // forbidText: ''
+                forbidText: '',
+                restTime: 15,
+                writable: false,
+                timer: null,
+            },
+            methods: {
+                startTimer: function () {
+                    this.timer = setInterval(() => {
+                        //function() this == windows전역객체
+                        //eventHandler this == event 대상
+                        console.log('startTimer')
+                        console.log(this.restTime)
+                        this.restTime--;
+                    }, 1000);
+                }
+            },
+            watch: {
+                //감시하다가 특정 상태가 되면 발동되는 속성
+                inputText: function () {
+                    let ary = this.forbidText.split(',')
+                    for (let i in ary) {
+                        console.log(ary[i].trim())
+                        let pos = this.inputText.indexOf(ary[i].trim());
+                        if (pos != -1) {
+                            alert(ary[i] + '구문은 입력할 수 없습니다.');
+                            this.inputText = this.inputText.substring(0, pos); //제거
+                        }
+                    }
+                },
+                restTime: function () {
+                    if (this.restTime == 0) {
+                        console.log('timer call')
+                        this.writable = true;
+                        clearInterval(this.timer)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
