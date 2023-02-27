@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/img/**" location="/img/" />
+	<!-- mapping = url요청 패턴 , location = 경로명 -->
+	<!-- 스트링이 처리할 정적(static) 파일들은 <resources>로 처리해주던지 resources 폴더 안에 넣어주면 됨! -->
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	<!-- internalResource == jsp파일들! -->
+	<!-- WEBINF는 외부에서 직접 접근할 수 없음 -->
+	<!-- 근데 왜 WEBINF에 JSP 파일들을 넣을까? webzip을 사용하면 외부에서 모든 파일들을 다 읽을 수 잇음 이런 걸 방지하기 위해
+	보안상 WEBINF에 넣어둠. 우린 어떻게 뺄까. 컨트롤러에서 타고 들어가서 파일을 읽는 것!
+	그리고 이 과정에서 필요한 게 InternalResourceViewResolver임!
+		
+	 -->
+	<context:component-scan base-package="co.yedam.app" />
+	
+	
+	
+</beans:beans>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.five.mprj.qna.map.QnaMapper">
+	<!-- 전체조회 -->
+	<select id="qnaSelectList"
+		resultType="co.five.mprj.qna.service.QnaVO">
+		SELECT * FROM QNA ORDER BY QNA_NUM DESC
+	</select>
+
+	<!-- 단건조회 -->
+	<select id="qnaSelect"
+		resultType="co.five.mprj.qna.service.QnaVO">
+		SELECT * FROM QNA WHERE QNA_NUM = #{qnaNum}
+	</select>
+
+	<!-- 입력 -->
+	<insert id="qnaInsert"
+		parameterType="co.five.mprj.qna.service.QnaVO">
+		<selectKey keyProperty="qnaNum" resultType="int"
+			order="BEFORE">
+			SELECT
+			CASE WHEN MAX(QNA_NUM) IS NULL THEN 1 ELSE MAX(QNA_NUM) +
+			1 END AS
+			QNA_NUM
+			FROM QNA
+		</selectKey>
+		INSERT INTO QNA
+		VALUES(#{qnaNum}, #{qnaTitle},
+		#{qnaSubject},
+		#{qnaWriter}, #{qnaDate}, 0, #{qnaFileUrl})
+	</insert>
+
+	<!-- 수정 -->
+	<update id="qnaUpdate"
+		parameterType="co.five.mprj.qna.service.QnaVO">
+		UPDATE QNA
+		<set>
+			<if test="qnaTitle != null">QNA_TITLE = #{qnaTitle},</if>
+			<if test="qnaSubject != null">QNA_SUBJECT = #{qnaSubject},</if>
+			<if test="qnaFileUrl != null">QNA_FILE_URL = #{qnaFileUrl},</if>
+		</set>
+		WHERE QNA_NUM = #{qnaNum}
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="qnaDelete"
+		parameterType="co.five.mprj.qna.service.QnaVO">
+		DELETE FROM QNA WHERE QNA_NUM = #{qnaNum}
+	</delete>
+
+	<!-- 조회수 증가 -->
+	<update id="qnaHitUpdate">
+		UPDATE QNA SET QNA_HIT = QNA_HIT + 1 WHERE
+		QNA_NUM =
+		#{qnaNum}
+	</update>
+
+</mapper>

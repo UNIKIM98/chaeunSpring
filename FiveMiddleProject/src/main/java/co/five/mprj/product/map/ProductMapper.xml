@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.five.mprj.product.map.ProductMapper">
+	<select id="productSelectList" resultType="co.five.mprj.product.service.ProductVO">
+		SELECT * FROM PRODUCT ORDER BY PRODUCT_NUM DESC
+	</select>
+	
+	<select id="productSelect" resultType="co.five.mprj.product.service.ProductVO">
+		SELECT * FROM PRODUCT WHERE PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<insert id="productInsert" parameterType="co.five.mprj.product.service.ProductVO">
+		<selectKey keyProperty="productNum" resultType="int" order="BEFORE">
+			SELECT 
+				CASE WHEN MAX(PRODUCT_NUM) IS NULL THEN 1 ELSE MAX(PRODUCT_NUM) + 1 END AS PRODUCTNUM
+			FROM PRODUCT
+		</selectKey>
+		INSERT INTO PRODUCT
+		VALUES(#{productNum},#{productName},#{productExplain},#{productTrainer},#{productPrice}
+				,#{productSubject},#{productDate},#{productThumbnailUrl},#{productYoutubeurl})
+	</insert>
+	
+	<update id="productUpdate" parameterType="co.five.mprj.product.service.ProductVO">
+			UPDATE PRODUCT
+			<set>
+			<if test="productName != null">PRODUCT_NAME = #{productName},</if>
+			<if test="productExplain != null">PRODUCT_EXPLAIN = #{productExplain},</if>
+			<if test="productTrainer != null">PRODUCT_TRAINER = #{productTrainer},</if>
+			<if test="productPrice != null">PRODUCT_PRICE = #{productPrice},</if>
+			<if test="productSubject != null">PRODUCT_SUBJECT = #{productSubject},</if>
+			<if test="productDate != null">PRODUCT_DATE = #{productDate},</if>
+			<if test="productThumbnailUrl != null">PRODUCT_THUMBNAIL_URL = #{productThumbnailUrl},</if>
+			<if test="productYoutubeurl != null">PRODUCT_YOUTUBE_URL = #{productYoutubeurl}</if>
+			</set>
+			WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	
+	<delete id="productDelete" parameterType="co.five.mprj.product.service.ProductVO">
+		DELETE FROM PRODUCT WHERE PRODUCT_NUM = #{productNum}
+	</delete>
+
+</mapper>
+	
